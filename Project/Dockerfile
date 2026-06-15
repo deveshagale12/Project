@@ -11,7 +11,10 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 # Copy the jar from the build stage
-COPY --from=build /app/target/*.jar app.jar
+#COPY --from=build /app/target/*.jar app.jar
+
+COPY --from=build /app/target/my-app-0.0.1-SNAPSHOT.jar app.jar
+
 # Expose the port your app runs on
 EXPOSE 8080
 # Run the application
