@@ -4,11 +4,14 @@
 FROM maven:3.8.5-eclipse-temurin-17 AS build
 WORKDIR /app
 
-# Copy the pom.xml and source code from your inner "Project" directory
+# 1. Copy pom.xml first to fetch and cache dependencies
 COPY Project/pom.xml ./
+RUN mvn dependency:go-offline -B
+
+# 2. Copy the actual source code
 COPY Project/src ./src
 
-# Build the application and package it into a JAR file, skipping tests
+# 3. Build the application and package it into a JAR file, skipping tests
 RUN mvn clean package -DskipTests
 
 # =========================================================================
@@ -17,7 +20,7 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# Copy the compiled JAR file from the build stage
+# Copy the compiled JAR file from the build stage safely using a wildcard match
 COPY --from=build /app/target/*.jar app.jar
 
 # Expose the port Spring Boot runs on
