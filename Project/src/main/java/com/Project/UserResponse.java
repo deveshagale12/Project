@@ -1,85 +1,40 @@
 package com.Project;
 
-import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "users", indexes = {
-        @Index(name = "idx_user_email", columnList = "email", unique = true),
-        @Index(name = "idx_user_username", columnList = "username", unique = true)
-})
-public class User {
 
-    // 1. Primary Key
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UserResponse {
+
     private Long id;
-
-    // 2. Username
-    @Column(name = "username", nullable = false, unique = true, length = 50)
     private String username;
-
-    // 3. Email
-    @Column(name = "email", nullable = false, unique = true, length = 100)
     private String email;
-
-    // 4. Password (stored hashed)
-    @Column(name = "password", nullable = false)
-    private String password;
-
-    // 5. First Name
-    @Column(name = "first_name", length = 50)
     private String firstName;
-
-    // 6. Last Name
-    @Column(name = "last_name", length = 50)
     private String lastName;
-
-    // 7. Phone Number
-    @Column(name = "phone_number", length = 20)
     private String phoneNumber;
-
-    // 8. Address
-    @Column(name = "address", length = 255)
     private String address;
-
-    // 9. Role
-    @Column(name = "role", length = 20)
     private String role;
-
-    // 10. Active status
-    @Column(name = "is_active")
     private Boolean isActive;
-
-    // 11. Created at (date & time)
-    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
-
-    // 12. Updated at (date & time)
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public User() {
+    public UserResponse() {
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-        if (this.isActive == null) {
-            this.isActive = true;
-        }
-        if (this.role == null) {
-            this.role = "USER";
-        }
+    public UserResponse(Long id, String username, String email, String firstName, String lastName,
+                         String phoneNumber, String address, String role, Boolean isActive,
+                         LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+        this.role = role;
+        this.isActive = isActive;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    // ---------- Getters and Setters ----------
 
     public Long getId() {
         return id;
@@ -103,14 +58,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFirstName() {
